@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
+#include "CameraPawn.h"
 #include "PlayerPawn.generated.h"
 
 UCLASS()
@@ -18,6 +19,18 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	UPROPERTY(BlueprintReadWrite)
+	ACameraPawn* _cameraPawn;
+
+	UPROPERTY(BlueprintReadWrite)
+	UPawnMovementComponent* _pawnMovement;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float speedMultiplier;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float minimumSpeed;
 
 public:	
 	// Called every frame

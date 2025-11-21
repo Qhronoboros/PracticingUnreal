@@ -15,8 +15,8 @@ public:
 	// Sets default values for this pawn's properties
 	ACameraPawn();
 
-	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	//APlayerCameraManager* camera;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	FVector mouseHitPosition;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	FVector topLeftWorldCorner;
@@ -31,13 +31,13 @@ public:
 	FVector bottomLeftWorldCorner;
 
 	UFUNCTION(BlueprintCallable)
-	bool GetTraceHit(FVector location, FVector direction, FHitResult& hit);
+	bool GetLineTraceHit(FVector location, FVector direction, FHitResult& hit);
 
 	UFUNCTION(BlueprintCallable)
-	bool GetMouseTraceHit(FHitResult& hit);
+	bool GetMouseLineTraceHit(FHitResult& hit);
 
 	UFUNCTION(BlueprintCallable)
-	void GetViewportCorners();
+	void ReceiveViewportCorners();
 
 protected:
 	// Called when the game starts or when spawned

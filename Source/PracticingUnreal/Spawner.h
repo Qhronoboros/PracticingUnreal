@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "CameraPawn.h"
 #include "Spawner.generated.h"
 
 UCLASS()
@@ -15,15 +16,18 @@ public:
 	// Sets default values for this actor's properties
 	ASpawner();
 
-	UPROPERTY(EditAnywhere)
-	TSubclassOf<AActor> actorToSpawn;
-
-	UPROPERTY(EditAnywhere)
-	FVector spawnPosition;
-
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	UPROPERTY(BlueprintReadWrite)
+	ACameraPawn* _cameraPawn;
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<AActor> _actorToSpawn;
+
+	UPROPERTY(EditAnywhere)
+	FVector _spawnPosition;
 
 public:	
 	// Called every frame

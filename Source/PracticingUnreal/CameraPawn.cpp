@@ -17,27 +17,27 @@ void ACameraPawn::BeginPlay()
 	Super::BeginPlay();
 }
 
-bool ACameraPawn::GetTraceHit(FVector location, FVector direction, FHitResult& hit)
+bool ACameraPawn::GetLineTraceHit(FVector location, FVector direction, FHitResult& hit)
 {
 	FCollisionQueryParams collisionParams;
 	DrawDebugLine(GetWorld(), location, location + direction * 10000.0f, FColor::Blue, false, 5.0f);
 	if (!GetWorld()->LineTraceSingleByChannel(hit, location, location + direction * 10000.0f, ECC_Visibility, collisionParams)) return false;
 
-	UE_LOG(LogTemp, Log, TEXT("%s"), *hit.Location.ToString());
+	//UE_LOG(LogTemp, Log, TEXT("%s"), *hit.Location.ToString());
 
 	return true;
 }
 
-bool ACameraPawn::GetMouseTraceHit(FHitResult& hit)
+bool ACameraPawn::GetMouseLineTraceHit(FHitResult& hit)
 {
 	FVector worldLocation;
 	FVector worldDirection;
 	GetWorld()->GetFirstPlayerController()->DeprojectMousePositionToWorld(worldLocation, worldDirection);
 
-	return GetTraceHit(worldLocation, worldDirection, hit);
+	return GetLineTraceHit(worldLocation, worldDirection, hit);
 }
 
-void ACameraPawn::GetViewportCorners()
+void ACameraPawn::ReceiveViewportCorners()
 {
 	FVector2D viewportSize;
 	GetWorld()->GetGameViewport()->GetViewportSize(viewportSize);
@@ -57,9 +57,9 @@ void ACameraPawn::GetViewportCorners()
 	{
 		FVector worldLocation;
 		FVector worldDirection;
-		UE_LOG(LogTemp, Log, TEXT("%s"), *viewportLocations[i].ToString());
+		//UE_LOG(LogTemp, Log, TEXT("%s"), *viewportLocations[i].ToString());
 		GetWorld()->GetFirstPlayerController()->DeprojectScreenPositionToWorld(viewportLocations[i].X, viewportLocations[i].Y, worldLocation, worldDirection);
-		if (!GetTraceHit(worldLocation, worldDirection, hit[i]))
+		if (!GetLineTraceHit(worldLocation, worldDirection, hit[i]))
 		{
 			UE_LOG(LogTemp, Warning, TEXT("Trace did not hit an object for getting one of the corners"));
 		}
@@ -77,7 +77,9 @@ void ACameraPawn::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	FHitResult hit;
-	GetMouseTraceHit(hit);
+	if (!GetMouseLineTraceHit(hit)) return;
+
+	mouseHitPosition = hit.Location;
 }
 
 // Called to bind functionality to input

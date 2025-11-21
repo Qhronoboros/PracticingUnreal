@@ -30,6 +30,8 @@ void ASpawner::SpawnActor()
 	FActorSpawnParameters spawnParams;
 	spawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
 
-	GetWorld()->SpawnActor<AActor>(actorToSpawn, spawnPosition, FRotator::ZeroRotator, spawnParams);
+	AActor* projectile = GetWorld()->SpawnActor<AActor>(_actorToSpawn, _spawnPosition, FRotator::ZeroRotator, spawnParams);
+
+	//_cameraPawn->topLeftWorldCorner
 }
 
