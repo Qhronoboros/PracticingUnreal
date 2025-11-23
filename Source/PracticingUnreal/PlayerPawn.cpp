@@ -28,20 +28,18 @@ void APlayerPawn::Tick(float DeltaTime)
 
 	// Rotate towards mouse hit position
 	FVector direction = _cameraPawn->mouseHitPosition - GetActorTransform().GetLocation();
-	direction.Normalize();
-	SetActorRotation(direction.Rotation());
+	FVector direction2D = FVector(direction.X, direction.Y, 0.0f);
+	direction2D.Normalize();
+	SetActorRotation(direction2D.Rotation());
 
 	// Distance between playerPawn and mouse location
 	float distance = FVector2D::Distance(actorPosition2D, mouseHitPosition2D);
+	// Keeps the playerPawn from spazzing out
+	if (distance < 10.0f) return;
 
-	//UE_LOG(LogTemp, Log, TEXT("%f"), distance * 0.5f);
-
-	FVector velocity = direction * FMath::Max(distance * speedMultiplier, minimumSpeed);
-
-	// Removing vertical axis
+	// Move towards mouse hit position
+	FVector velocity = direction2D * FMath::Max(distance * _speedMultiplier, _minimumSpeed);
 	FVector velocity2D = FVector(velocity.X, velocity.Y, 0.0f);
-
-	// Set velocity
 	_pawnMovement->Velocity = velocity2D;
 }
 

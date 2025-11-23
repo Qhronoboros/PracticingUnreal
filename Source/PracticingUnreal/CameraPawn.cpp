@@ -23,8 +23,6 @@ bool ACameraPawn::GetLineTraceHit(FVector location, FVector direction, FHitResul
 	DrawDebugLine(GetWorld(), location, location + direction * 10000.0f, FColor::Blue, false, 5.0f);
 	if (!GetWorld()->LineTraceSingleByChannel(hit, location, location + direction * 10000.0f, ECC_Visibility, collisionParams)) return false;
 
-	//UE_LOG(LogTemp, Log, TEXT("%s"), *hit.Location.ToString());
-
 	return true;
 }
 
@@ -43,32 +41,48 @@ void ACameraPawn::ReceiveViewportCorners()
 	GetWorld()->GetGameViewport()->GetViewportSize(viewportSize);
 
 	// The four corners of the viewport
-	FVector2D viewportLocations[4] =
+	TArray<FVector2D> viewportLocations =
 	{
 		{ 0.0f, viewportSize.Y },
 		{ viewportSize },
-		{ 0.0f, 0.0f },
-		{ viewportSize.X, 0.0f }
+		{ viewportSize.X, 0.0f },
+		{ 0.0f, 0.0f }
 	};
-
-	FHitResult hit[4];
 	
 	for (int i = 0; i < 4; i++)
 	{
 		FVector worldLocation;
 		FVector worldDirection;
-		//UE_LOG(LogTemp, Log, TEXT("%s"), *viewportLocations[i].ToString());
+		FHitResult hit;
+
 		GetWorld()->GetFirstPlayerController()->DeprojectScreenPositionToWorld(viewportLocations[i].X, viewportLocations[i].Y, worldLocation, worldDirection);
-		if (!GetLineTraceHit(worldLocation, worldDirection, hit[i]))
+		if (!GetLineTraceHit(worldLocation, worldDirection, hit))
 		{
-			UE_LOG(LogTemp, Warning, TEXT("Trace did not hit an object for getting one of the corners"));
+			UE_LOG(LogTemp, Warning, TEXT("LineTrace did not hit an object for getting one of the corners"));
+			continue;
 		}
+
+		viewportWorldCorners.Emplace(hit.Location);
+	}
+}
+
+void ACameraPawn::ReceiveCenterPosition()
+{
+	FVector2D viewportSize;
+	GetWorld()->GetGameViewport()->GetViewportSize(viewportSize);
+
+	FVector worldLocation;
+	FVector worldDirection;
+	FHitResult hit;
+
+	GetWorld()->GetFirstPlayerController()->DeprojectScreenPositionToWorld(viewportSize.X / 2.0f, viewportSize.Y / 2.0f, worldLocation, worldDirection);
+	if (!GetLineTraceHit(worldLocation, worldDirection, hit))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("LineTrace did not hit an object for getting the center position"));
+		return;
 	}
 
-	topLeftWorldCorner = hit[0].Location;
-	topRightWorldCorner = hit[1].Location;
-	bottomLeftWorldCorner = hit[2].Location;
-	bottomRightWorldCorner = hit[3].Location;
+	centerPosition = hit.Location;
 }
 
 // Called every frame

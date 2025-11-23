@@ -18,17 +18,12 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	FVector mouseHitPosition;
 
+	// Closed Convex Line
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	FVector topLeftWorldCorner;
+	TArray<FVector> viewportWorldCorners;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	FVector topRightWorldCorner;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	FVector bottomRightWorldCorner;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	FVector bottomLeftWorldCorner;
+	FVector centerPosition;
 
 	UFUNCTION(BlueprintCallable)
 	bool GetLineTraceHit(FVector location, FVector direction, FHitResult& hit);
@@ -38,6 +33,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void ReceiveViewportCorners();
+
+	UFUNCTION(BlueprintCallable)
+	void ReceiveCenterPosition();
 
 protected:
 	// Called when the game starts or when spawned

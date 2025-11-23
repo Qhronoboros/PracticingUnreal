@@ -20,19 +20,17 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	UPROPERTY(BlueprintReadWrite)
-	ACameraPawn* _cameraPawn;
-
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSubclassOf<AActor> _actorToSpawn;
 
-	UPROPERTY(EditAnywhere)
-	FVector _spawnPosition;
+	// +spawnOffset = closer to center, -spawnOffset = away from center
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float _spawnOffset;
 
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION(BlueprintCallable, Category = "Spawn")
-	void SpawnActor();
+	void SpawnActor(const TArray<FVector> linePoints , const FVector centerPosition);
 };

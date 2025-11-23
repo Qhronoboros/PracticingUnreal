@@ -14,12 +14,22 @@ AProjectile::AProjectile()
 void AProjectile::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 // Called every frame
 void AProjectile::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-}
+	
+	bool recentlyRendered = WasRecentlyRendered();
 
+	// Destroy actor when leaving viewport
+	if (!_onScreen && recentlyRendered)
+	{
+		_onScreen = true;
+	}
+	else if (_onScreen && !recentlyRendered)
+	{
+		Destroy();
+	}
+}

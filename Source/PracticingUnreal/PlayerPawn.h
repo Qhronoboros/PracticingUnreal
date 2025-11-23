@@ -27,10 +27,10 @@ protected:
 	UPawnMovementComponent* _pawnMovement;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float speedMultiplier;
+	float _speedMultiplier;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float minimumSpeed;
+	float _minimumSpeed;
 
 public:	
 	// Called every frame
